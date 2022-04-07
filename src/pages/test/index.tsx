@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormUser } from "../../components/FormUser";
+import { FormAddress } from "../../components/FormAddress";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -44,34 +45,40 @@ function a11yProps(index: number) {
 const Test: NextPage = () => {
   const [value, setValue] = useState(0);
   const [formData, setFormData] = useState<IFormDataProps>();
-  const [hasError, setHasError] = useState<Boolean[]>([]);
+  const [hasError, setHasError] = useState<Boolean>(true);
 
-  const tabs = new Map([
-    ["form", { hasError: true }],
-    ["form1", { hasError: false }],
-    ["form2", { hasError: false }],
-  ]);
+  const tabs: { [key: string]: Boolean } = {
+    form: true,
+    form1: true,
+    form2: false,
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const onError = (formName: string) => (errors: IFormDataProps) => {
-    tabs.set(formName, { hasError: true });
+    tabs[formName] = true;
   };
 
   const onSubmit = (formName: string) => (data: any) => {
-    tabs.set(formName, { hasError: false });
+    tabs[formName] = false;
     setFormData({
       ...formData,
       ...data,
     });
 
-    tabs.forEach((value) =>
-      value.hasError === true ? setHasError((state) => [...state, true]) : null
-    );
+    console.log(tabs);
+    console.log(hasError);
 
-    if (hasError.includes(true)) return;
+    tabs.includes(true);
+
+    tabs.forEach((value) => {
+      console.log(value.hasError);
+      value.hasError === true ? setHasError(true) : setHasError(false);
+    });
+
+    if (hasError === true) return;
 
     console.log("do something");
   };
@@ -93,7 +100,7 @@ const Test: NextPage = () => {
         <FormUser store={formData} onSubmit={onSubmit} onError={onError} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <FormAddress store={formData} onSubmit={onSubmit} onError={onError} />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
