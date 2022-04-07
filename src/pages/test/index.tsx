@@ -45,10 +45,11 @@ const Test: NextPage = () => {
   const [value, setValue] = useState(0);
   const [formData, setFormData] = useState<IFormDataProps>();
 
-  const tabs = new Map();
-  tabs.set("form", false);
-  tabs.set("form1", true);
-  tabs.set("form2", true);
+  const tabs = new Map([
+    ["form", false],
+    ["form1", true],
+    ["form2", true],
+  ]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -65,9 +66,9 @@ const Test: NextPage = () => {
       ...data,
     });
 
-    console.log(tabs.has(false));
+    const hasError = tabs.entries();
 
-    if (tabs.has(false)) {
+    if (hasError.includes(false)) {
       console.log("aeew");
     }
   };
