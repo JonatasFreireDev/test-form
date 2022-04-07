@@ -50,10 +50,9 @@ const Test: NextPage = () => {
     setValue(newValue);
   };
 
-  const onError = (errors: IFormDataProps) => {
+  const onError = (formName: string) => (errors: IFormDataProps) => {
     console.log("errr");
     setFormDataErrors({
-      ...formDataErrors,
       ...errors,
     });
   };

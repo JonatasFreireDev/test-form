@@ -25,7 +25,7 @@ export const FormUser = ({ onSubmit, onError, store }: IFormChildProp) => {
       component="form"
       noValidate
       autoComplete="off"
-      onSubmit={handleSubmit(onSubmit("form"), onError)}
+      onSubmit={handleSubmit(onSubmit("form"), onError("form"))}
     >
       <TextField
         {...register("name")}
