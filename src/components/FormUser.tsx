@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,7 +15,13 @@ const schema = yup.object().shape({
 });
 
 export const FormUser = ({ onSubmit, onError, store }: IFormChildProp) => {
-  const { register, handleSubmit, clearErrors, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    reset,
+    formState: { errors },
+  } = useForm({
     defaultValues: store,
     resolver: yupResolver(schema),
   });
@@ -31,6 +37,8 @@ export const FormUser = ({ onSubmit, onError, store }: IFormChildProp) => {
         {...register("name")}
         label="Name"
         variant="standard"
+        error={!!errors?.name?.message}
+        helperText={errors?.name?.message}
         required
       />
       <Grid container spacing={2} p={2} margin="auto">

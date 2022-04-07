@@ -46,9 +46,9 @@ const Test: NextPage = () => {
   const [formData, setFormData] = useState<IFormDataProps>();
 
   const tabs = new Map([
-    ["form", false],
-    ["form1", true],
-    ["form2", true],
+    ["form", { hasError: true }],
+    ["form1", { hasError: false }],
+    ["form2", { hasError: false }],
   ]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -56,17 +56,21 @@ const Test: NextPage = () => {
   };
 
   const onError = (formName: string) => (errors: IFormDataProps) => {
-    tabs.set(formName, false);
+    tabs.set(formName, { hasError: true });
   };
 
   const onSubmit = (formName: string) => (data: any) => {
-    tabs.set(formName, true);
+    tabs.set(formName, { hasError: false });
     setFormData({
       ...formData,
       ...data,
     });
 
-    const hasError = tabs.entries();
+    const hasError: Boolean[] = [];
+
+    tabs.forEach((value) =>
+      value.hasError === true ? hasError.push(true) : null
+    );
 
     if (hasError.includes(false)) {
       console.log("aeew");
