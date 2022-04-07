@@ -44,25 +44,32 @@ function a11yProps(index: number) {
 const Test: NextPage = () => {
   const [value, setValue] = useState(0);
   const [formData, setFormData] = useState<IFormDataProps>();
-  const [formDataErrors, setFormDataErrors] = useState<IFormDataProps>();
+
+  const tabs = new Map();
+  tabs.set("form", false);
+  tabs.set("form1", true);
+  tabs.set("form2", true);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const onError = (formName: string) => (errors: IFormDataProps) => {
-    console.log("errr");
-    setFormDataErrors({
-      ...errors,
-    });
+    tabs.set(formName, false);
   };
 
   const onSubmit = (formName: string) => (data: any) => {
-    console.log(formName);
+    tabs.set(formName, true);
     setFormData({
       ...formData,
       ...data,
     });
+
+    console.log(tabs.has(false));
+
+    if (tabs.has(false)) {
+      console.log("aeew");
+    }
   };
 
   return (
