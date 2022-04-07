@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormUser } from "../../components/FormUser";
 import { FormAddress } from "../../components/FormAddress";
+import { useFormHook } from "../../hooks/useFormHook";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -44,38 +45,12 @@ function a11yProps(index: number) {
 
 const Test: NextPage = () => {
   const [value, setValue] = useState(0);
-  const [formData, setFormData] = useState<IFormDataProps>();
-  const [tabs, setTabs] = useState<{ [key: string]: Boolean }>({
-    form: true,
-    form1: true,
-    form2: false,
-  });
-
-  useEffect(() => {
-    const hasError = Object.values(tabs).includes(true);
-    console.log("tem erro ?", hasError);
-    if (hasError === true) return;
-
-    console.log("passei");
-  }, [tabs]);
+  const { formData, onError, onSubmit } = useFormHook();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const onError = (formName: string) => (errors: IFormDataProps) => {
-    setTabs({ ...tabs, [formName]: true });
-  };
-
-  const onSubmit = (formName: string) => (data: any) => {
-    setTabs({ ...tabs, [formName]: false });
-    setFormData({
-      ...formData,
-      ...data,
-    });
-  };
-
-  console.log(tabs);
   return (
     <div>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

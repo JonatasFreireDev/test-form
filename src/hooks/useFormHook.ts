@@ -1,25 +1,39 @@
-import { useForm as useFormHookImport } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-export type initialValues = {
-  name: string;
-  lastName: string;
-  name2: string;
-  lasName2: string;
-};
-
-const schema = yup.object({
-  name: yup.string().required(),
-  lastName: yup.string().required(),
-  name2: yup.string().required(),
-  lasName2: yup.string().required(),
-});
+import { useEffect, useState } from "react";
 
 export const useFormHook = () => {
-  const useForm = useFormHookImport<initialValues>({
-    resolver: yupResolver(schema),
+  const [formData, setFormData] = useState<any>();
+  const [tabs, setTabs] = useState<{ [key: string]: Boolean }>({
+    form: true,
+    form1: true,
+    form2: false,
   });
 
-  return { ...useForm };
+  useEffect(() => {
+    const hasError = Object.values(tabs).includes(true);
+    console.log("tem erro ?", hasError);
+    if (hasError === true) return;
+
+    alert(formData);
+    console.log("passei");
+  }, [tabs]);
+
+  const onError = (formName: string) => (errors: any) => {
+    setTabs({ ...tabs, [formName]: true });
+  };
+
+  const onSubmit = (formName: string) => (data: any) => {
+    setTabs({ ...tabs, [formName]: false });
+    setFormData({
+      ...formData,
+      ...data,
+    });
+  };
+
+  console.log(tabs);
+
+  return {
+    formData,
+    onError,
+    onSubmit,
+  };
 };
