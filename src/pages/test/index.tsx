@@ -44,6 +44,7 @@ function a11yProps(index: number) {
 const Test: NextPage = () => {
   const [value, setValue] = useState(0);
   const [formData, setFormData] = useState<IFormDataProps>();
+  const [hasError, setHasError] = useState<Boolean[]>([]);
 
   const tabs = new Map([
     ["form", { hasError: true }],
@@ -66,15 +67,13 @@ const Test: NextPage = () => {
       ...data,
     });
 
-    const hasError: Boolean[] = [];
-
     tabs.forEach((value) =>
-      value.hasError === true ? hasError.push(true) : null
+      value.hasError === true ? setHasError((state) => [...state, true]) : null
     );
 
-    if (hasError.includes(false)) {
-      console.log("aeew");
-    }
+    if (hasError.includes(true)) return;
+
+    console.log("do something");
   };
 
   return (
