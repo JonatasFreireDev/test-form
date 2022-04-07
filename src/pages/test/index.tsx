@@ -45,7 +45,8 @@ function a11yProps(index: number) {
 
 const Test: NextPage = () => {
   const [value, setValue] = useState(0);
-  const { formData, onError, onSubmit } = useFormHook();
+  const arrTabs = ["form", "form1"];
+  const { formData, onError, onSubmit } = useFormHook({ arrTabs });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

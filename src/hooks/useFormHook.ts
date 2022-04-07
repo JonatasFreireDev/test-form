@@ -1,32 +1,45 @@
 import { useEffect, useState } from "react";
 
-export const useFormHook = () => {
+type IuseFormHookProps = {
+  arrTabs: string[];
+  onSubmitFunc?: () => {};
+};
+
+export const useFormHook = ({ arrTabs, onSubmitFunc }: IuseFormHookProps) => {
   const [formData, setFormData] = useState<any>();
-  const [tabs, setTabs] = useState<{ [key: string]: Boolean }>({
-    form: true,
-    form1: true,
-    form2: false,
-  });
+  const [tabs, setTabs] = useState<{ [key: string]: Boolean }>({ form: true });
+
+  useEffect(() => {
+    const teste = arrTabs.reduce((acc, value) => {
+      return {
+        ...acc,
+        [value]: true,
+      };
+    }, {});
+
+    setTabs({ ...teste });
+  }, []);
 
   useEffect(() => {
     const hasError = Object.values(tabs).includes(true);
     console.log("tem erro ?", hasError);
     if (hasError === true) return;
 
-    alert(formData);
+    alert(JSON.stringify(formData));
     console.log("passei");
-  }, [tabs]);
+    console.log(formData);
+  }, [tabs, formData]);
 
   const onError = (formName: string) => (errors: any) => {
-    setTabs({ ...tabs, [formName]: true });
+    setTabs((oldState) => ({ ...oldState, [formName]: true }));
   };
 
   const onSubmit = (formName: string) => (data: any) => {
-    setTabs({ ...tabs, [formName]: false });
-    setFormData({
-      ...formData,
+    setTabs((oldState) => ({ ...oldState, [formName]: false }));
+    setFormData((oldState: any) => ({
+      ...oldState,
       ...data,
-    });
+    }));
   };
 
   console.log(tabs);
