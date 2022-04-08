@@ -5,19 +5,29 @@ type IuseFormHookProps = {
   onSubmitFunc?: () => {};
 };
 
-export const useFormHook = ({ arrTabs, onSubmitFunc }: IuseFormHookProps) => {
-  const [formData, setFormData] = useState<any>();
+export interface IFormChildProp {
+  onSubmit: (formName: string) => (data: any) => void;
+  onError: (formName: string) => (data: any) => void;
+  setFormData: any;
+  formData: any;
+}
+
+export const useFormHook = <IFormData>({
+  arrTabs,
+  onSubmitFunc,
+}: IuseFormHookProps): IFormChildProp => {
+  const [formData, setFormData] = useState<IFormData>();
   const [tabs, setTabs] = useState<{ [key: string]: Boolean }>({ form: true });
 
   useEffect(() => {
-    const teste = arrTabs.reduce((acc, value) => {
+    const formatedTabs = arrTabs.reduce((acc, value) => {
       return {
         ...acc,
         [value]: true,
       };
     }, {});
 
-    setTabs({ ...teste });
+    setTabs({ ...formatedTabs });
   }, []);
 
   useEffect(() => {
@@ -28,24 +38,27 @@ export const useFormHook = ({ arrTabs, onSubmitFunc }: IuseFormHookProps) => {
     alert(JSON.stringify(formData));
     console.log("passei");
     console.log(formData);
-  }, [tabs, formData]);
+
+    onSubmitFunc && onSubmitFunc();
+  }, [tabs]);
 
   const onError = (formName: string) => (errors: any) => {
     setTabs((oldState) => ({ ...oldState, [formName]: true }));
   };
 
   const onSubmit = (formName: string) => (data: any) => {
-    setTabs((oldState) => ({ ...oldState, [formName]: false }));
     setFormData((oldState: any) => ({
       ...oldState,
       ...data,
     }));
+    setTabs((oldState) => ({ ...oldState, [formName]: false }));
   };
 
   console.log(tabs);
 
   return {
     formData,
+    setFormData,
     onError,
     onSubmit,
   };

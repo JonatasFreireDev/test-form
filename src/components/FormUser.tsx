@@ -1,20 +1,21 @@
 import { useForm } from "react-hook-form";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-type IFormChildProp = {
-  onSubmit: (data: any) => any;
-  onError: (data: any) => any;
-  store: any;
-};
+import { IFormChildProp } from "../hooks/useFormHook";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
 });
 
-export const FormUser = ({ onSubmit, onError, store }: IFormChildProp) => {
+export const FormUser = ({
+  onSubmit,
+  onError,
+  setFormData,
+  formData,
+}: IFormChildProp) => {
   const {
     register,
     handleSubmit,
@@ -22,7 +23,6 @@ export const FormUser = ({ onSubmit, onError, store }: IFormChildProp) => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: store,
     resolver: yupResolver(schema),
   });
 
@@ -45,8 +45,8 @@ export const FormUser = ({ onSubmit, onError, store }: IFormChildProp) => {
         <Grid item sm={2}>
           <Button
             onClick={() => {
+              setFormData();
               clearErrors();
-              reset();
             }}
             variant="outlined"
           >

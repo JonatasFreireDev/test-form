@@ -1,27 +1,28 @@
 import { useForm } from "react-hook-form";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-type IFormChildProp = {
-  onSubmit: (data: any) => any;
-  onError: (data: any) => any;
-  store: any;
-};
+import { IFormChildProp } from "../hooks/useFormHook";
 
 const schema = yup.object().shape({
   address: yup.string().required(),
 });
 
-export const FormAddress = ({ onSubmit, onError, store }: IFormChildProp) => {
+export const FormAddress = ({
+  onSubmit,
+  onError,
+  setFormData,
+  formData,
+}: IFormChildProp) => {
   const {
     register,
     handleSubmit,
     clearErrors,
     formState: { errors },
   } = useForm({
-    defaultValues: store,
+    defaultValues: formData,
     resolver: yupResolver(schema),
   });
 
