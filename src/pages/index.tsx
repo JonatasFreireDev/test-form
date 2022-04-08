@@ -84,6 +84,7 @@ const Home: NextPage = () => {
         <TabPanel value={value} index={2}>
           Item Three
         </TabPanel>
+        {methods.numberOfErrors}
       </div>
     </>
   );
