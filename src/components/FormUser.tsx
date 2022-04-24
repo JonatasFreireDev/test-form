@@ -5,7 +5,10 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IFormChildProp } from "../hooks/useFormHook";
-import { useEffect } from "react";
+
+type IFormUser = {
+  name: string;
+};
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -16,7 +19,7 @@ export const FormUser = ({
   onError,
   setFormData,
   formData,
-}: IFormChildProp) => {
+}: IFormChildProp<IFormUser>) => {
   const {
     register,
     handleSubmit,
@@ -25,12 +28,9 @@ export const FormUser = ({
     reset,
     formState: { errors },
   } = useForm({
+    defaultValues: formData,
     resolver: yupResolver(schema),
   });
-
-  useEffect(() => {
-    console.log(getValues());
-  }, [getValues()]);
 
   return (
     <Box

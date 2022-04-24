@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 
-type IuseFormHookProps = {
+type IuseFormHookProps<formData> = {
   arrTabs: string[];
-  onSubmitFunc?: () => {};
+  onSubmitFunc: (data: formData) => void;
 };
 
-export interface IFormChildProp {
-  onSubmit: (formName: string) => (data: any) => void;
+export interface IFormChildProp<formData> {
+  onSubmit: (formName: string) => (data: formData) => void;
   onError: (formName: string) => (data: any) => void;
   numberOfErrors: number;
   setFormData: any;
-  formData: any;
+  formData: formData;
 }
 
 export const useFormHook = <IFormData>({
   arrTabs,
   onSubmitFunc,
-}: IuseFormHookProps): IFormChildProp => {
+}: IuseFormHookProps<IFormData>): IFormChildProp<IFormData> => {
   const [formData, setFormData] = useState<IFormData>({} as IFormData);
   const [formDataErrors, setFormDataErrors] = useState<IFormData>(
     {} as IFormData
@@ -36,14 +36,9 @@ export const useFormHook = <IFormData>({
 
   useEffect(() => {
     const hasError = Object.values(tabs).includes(true);
-    console.log("tem erro ?", hasError);
     if (hasError === true) return;
 
-    alert(JSON.stringify(formData));
-    console.log("passei");
-    console.log(formData);
-
-    onSubmitFunc && onSubmitFunc();
+    onSubmitFunc && onSubmitFunc(formData);
   }, [tabs]);
 
   const onError = (formName: string) => (errors: any) => {
@@ -51,8 +46,8 @@ export const useFormHook = <IFormData>({
     setTabs((oldState) => ({ ...oldState, [formName]: true }));
   };
 
-  const onSubmit = (formName: string) => (data: any) => {
-    setFormData((oldState: any) => ({
+  const onSubmit = (formName: string) => (data: IFormData) => {
+    setFormData((oldState) => ({
       ...oldState,
       ...data,
     }));
@@ -63,8 +58,6 @@ export const useFormHook = <IFormData>({
     (acc) => (acc = acc + 1),
     0
   );
-
-  console.log(tabs);
 
   return {
     formData,

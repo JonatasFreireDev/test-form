@@ -6,6 +6,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IFormChildProp } from "../hooks/useFormHook";
 
+type IFormAddress = {
+  address: string;
+};
+
 const schema = yup.object().shape({
   address: yup.string().required(),
 });
@@ -15,7 +19,7 @@ export const FormAddress = ({
   onError,
   setFormData,
   formData,
-}: IFormChildProp) => {
+}: IFormChildProp<IFormAddress>) => {
   const {
     register,
     handleSubmit,
